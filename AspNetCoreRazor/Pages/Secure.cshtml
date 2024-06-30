@@ -1,0 +1,15 @@
+﻿@page "/Secure"
+@model SecureModel
+
+@attribute [Microsoft.AspNetCore.Authorization.Authorize()]
+
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>Secure</h1>
+
+
+@{
+    var user = HttpContext.User;
+     var test = this;
+}

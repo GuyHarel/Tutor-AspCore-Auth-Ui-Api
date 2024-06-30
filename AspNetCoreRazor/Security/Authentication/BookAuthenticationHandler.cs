@@ -19,8 +19,8 @@ namespace AspNetCoreRazor.Security.Authentication
             logger.LogInformation("HandleAuthenticateAsync");
             await Task.Delay(1);
 
-            var result = Success();
-            // var result = Fail();  // va appeler Challenge
+            //var result = Success();
+            var result = Fail();  // va appeler Challenge
             //var result = NoResult(); // va appeler Challenge
 
             return result;

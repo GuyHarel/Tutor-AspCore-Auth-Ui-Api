@@ -14,8 +14,8 @@ namespace AspNetCoreRazor
 
             // Ajouter un handler maison pour l'authentification
             builder.Services
-            .AddAuthentication("BookAuthenticationHandler")
-            .AddScheme<AuthenticationSchemeOptions, BookAuthenticationHandler>("BookAuthenticationHandler", o => { });
+                .AddAuthentication("BookAuthenticationHandler")
+                .AddScheme<AuthenticationSchemeOptions, BookAuthenticationHandler>("BookAuthenticationHandler", o => { });
 
             var app = builder.Build();
 
