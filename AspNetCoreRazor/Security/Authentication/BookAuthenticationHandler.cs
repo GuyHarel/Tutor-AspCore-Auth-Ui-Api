@@ -91,7 +91,9 @@ namespace AspNetCoreRazor.Security.Authentication
 
             //throw new ApplicationException("ceci est un test");
 
-            await Task.CompletedTask;
+            await Context.ForbidAsync(Scheme.Name, properties);
+
+            //await Task.CompletedTask;
 
             /*
              * Si on est un API, on peut retourner
@@ -112,7 +114,7 @@ namespace AspNetCoreRazor.Security.Authentication
 
         protected override Task HandleForbiddenAsync(AuthenticationProperties properties)
         {
-            var test = 123;
+
             return Task.CompletedTask;
         }
 
