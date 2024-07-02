@@ -1,5 +1,6 @@
 using AspNetCoreRazor.Security.Authentication;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AspNetCoreRazor
 {
@@ -14,8 +15,14 @@ namespace AspNetCoreRazor
 
             // Ajouter un handler maison pour l'authentification
             builder.Services
-                .AddAuthentication("BookAuthenticationHandler")
-                .AddScheme<AuthenticationSchemeOptions, BookAuthenticationHandler>("BookAuthenticationHandler", o => { });
+                //.AddAuthentication("BookAuthenticationHandler")
+                //.AddScheme<AuthenticationSchemeOptions, BookAuthenticationHandler>("BookAuthenticationHandler", o => { })
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Login";
+                    options.LogoutPath = "/Logout";
+                });
 
             var app = builder.Build();
 
