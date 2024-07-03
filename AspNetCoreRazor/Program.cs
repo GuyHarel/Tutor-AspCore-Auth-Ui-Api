@@ -22,6 +22,8 @@ namespace AspNetCoreRazor
                 {
                     options.LoginPath = "/Login";
                     options.LogoutPath = "/Logout";
+
+                    options.ExpireTimeSpan = TimeSpan.FromSeconds(20);
                 });
 
 
