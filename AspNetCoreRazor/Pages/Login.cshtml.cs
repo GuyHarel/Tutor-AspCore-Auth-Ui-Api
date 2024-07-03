@@ -22,7 +22,7 @@ namespace AspNetCoreRazor.Pages
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
             //Redirect("/Secure");
-            return RedirectToPage("/Secure");
+            return RedirectToPage("/Authenticated");
         }
     }
 }

@@ -1,14 +1,14 @@
-﻿@page "/Secure"
-@model SecureModel
+﻿@page "/Authenticated"
+@model AuthenticatedModel
 
 @* @attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles ="Bibi")] *@
 
-@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Bibi")]
+@attribute [Microsoft.AspNetCore.Authorization.Authorize()]
 
 @{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>Secure</h1>
+<h1>Authenticated</h1>
 
 
 @{

@@ -24,6 +24,7 @@ namespace AspNetCoreRazor
                     options.LogoutPath = "/Logout";
                 });
 
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -41,7 +42,8 @@ namespace AspNetCoreRazor
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseAuthorization();
+
+            app.UseAuthorization(); // doit être après UserRouting()
 
             app.MapRazorPages();
 
