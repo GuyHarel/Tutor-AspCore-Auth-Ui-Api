@@ -1,8 +1,13 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace AspNetCoreRazor.Pages
 {
@@ -12,17 +17,33 @@ namespace AspNetCoreRazor.Pages
         {
         }
 
-        public async Task<ActionResult>  OnPost(string username, string password) 
+        public IActionResult OnPost(string username, string password)
         {
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            // Claims
+            var claims = new[]
+            {
+            new Claim(JwtRegisteredClaimNames.Sub, username),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
 
-            var principal = new ClaimsPrincipal(identity);
+            // Secret Key
+            var secretKey128Bits = "6b9d5e8f3a4b2c1d0e6f7a8b9c0d1e2f3b4c5d6e7f8a9b0c1d2e3f4g5h6i7j8k";
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey128Bits));
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            // Credentials
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            //Redirect("/Secure");
-            return RedirectToPage("/Authenticated");
+            // Token
+            var token = new JwtSecurityToken(
+                issuer: "yourdomain.com",
+                audience: "yourdomain.com",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: creds);
+
+            return new JsonResult(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+
+
         }
     }
 }

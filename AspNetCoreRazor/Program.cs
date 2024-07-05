@@ -1,6 +1,9 @@
 using AspNetCoreRazor.Security.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace AspNetCoreRazor
 {
@@ -13,19 +16,21 @@ namespace AspNetCoreRazor
             // Add services to the container.
             builder.Services.AddRazorPages();
 
-            // Ajouter un handler maison pour l'authentification
-            builder.Services
-                //.AddAuthentication("BookAuthenticationHandler")
-                //.AddScheme<AuthenticationSchemeOptions, BookAuthenticationHandler>("BookAuthenticationHandler", o => { })
-                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/Login";
-                    options.LogoutPath = "/Logout";
-
-                    options.ExpireTimeSpan = TimeSpan.FromSeconds(20);
-                });
-
+            // Authentification JWT Bearer
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = "localhost:7068",
+                            ValidAudience = "localhost:7068",
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("aaa1111ddd888fff"))
+                        };
+                    });
 
             var app = builder.Build();
 

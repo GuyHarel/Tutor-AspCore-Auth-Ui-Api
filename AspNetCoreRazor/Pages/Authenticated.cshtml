@@ -5,6 +5,8 @@
 
 @attribute [Microsoft.AspNetCore.Authorization.Authorize()]
 
+<h1>User: @User?.Identity?.Name , Authenticated: @User?.Identity?.IsAuthenticated</h1>
+
 @{
     ViewData["Title"] = "Privacy Policy";
 }
