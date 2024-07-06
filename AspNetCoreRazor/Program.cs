@@ -16,23 +16,11 @@ namespace AspNetCoreRazor
             // Add services to the container.
             builder.Services.AddRazorPages();
 
-            // Authentification JWT Bearer
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = true,
-                            ValidateAudience = true,
-                            ValidateLifetime = true,
-                            ValidateIssuerSigningKey = true,
-                            ValidIssuer = "localhost:7068",
-                            ValidAudience = "localhost:7068",
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("aaa1111ddd888fff"))
-                        };
-                    });
+
             
             builder.Services.AddHttpClient();
+
+            builder.Services.AddLogging();
 
             var app = builder.Build();
 
@@ -51,8 +39,6 @@ namespace AspNetCoreRazor
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseAuthorization(); // doit être après UserRouting()
 
             app.MapRazorPages();
 

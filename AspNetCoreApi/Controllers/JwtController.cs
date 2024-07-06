@@ -36,8 +36,8 @@ namespace AspNetCoreApi.Controllers
 
             // Token
             var token = new JwtSecurityToken(
-                issuer: "yourdomain.com",
-                audience: "yourdomain.com",
+                issuer: "AspNetCoreApi.csproj",
+                audience: "AspNetCoreRazor.csproj",
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds);

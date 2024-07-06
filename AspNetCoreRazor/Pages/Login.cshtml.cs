@@ -32,25 +32,6 @@ namespace AspNetCoreRazor.Pages
             var httpClient = httpClientFactory.CreateClient();
             var reponse = httpClient.Send(CreerRequeteMessage(username, password));
 
-            //var data = new FormUrlEncodedContent(new Dictionary<string, string>
-            //{
-            //    { "username", username },
-            //    { "password", password }
-            //});
-
-            //var reponse = httpClient.Send(new HttpRequestMessage
-            //{
-            //    Method = HttpMethod.Post,
-            //    RequestUri = new Uri("https://localhost:7180/api/jwt"),
-            //    Headers =
-            //    {
-            //        { HeaderNames.Accept, "application/json" },
-            //        { HeaderNames.UserAgent, "gh" }
-            //    },
-            //    Content = data
-                
-            //});
-
             return new JsonResult(new { statut = reponse.StatusCode, content = reponse.Content.ReadAsStringAsync().Result });
         }
 

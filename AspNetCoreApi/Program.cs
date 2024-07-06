@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -26,22 +27,38 @@ namespace AspNetCoreApi
             var tenantId = "1a5bb257-5cdc-434d-b4cc-20e4218b3639";
             var clientId = "gh-util-api-test@guyharel13outlook.onmicrosoft.com";
 
-            builder.Services.AddAuthentication()
-                .AddJwtBearer(o =>
-                {
-                    o.Authority = $"https://login.microsoftonline.com/{tenantId}/v2.0";
-                    o.Audience = clientId;
-                    o.TokenValidationParameters = new TokenValidationParameters
+            // Authentification JWT Bearer
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = "gh-AspNetCoreApi.com",
-                        ValidAudience = "gh-AspNetCoreApi.com",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey128Bits))
-                    };
-                });
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = "AspNetCoreApi.csproj",
+                            ValidAudience = "AspNetCoreRazor.csproj",
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("aaa1111ddd888fff"))
+                        };
+                    });
+
+            //builder.Services.AddAuthentication()
+            //    .AddJwtBearer(o =>
+            //    {
+            //        o.Authority = $"https://login.microsoftonline.com/{tenantId}/v2.0";
+            //        o.Audience = clientId;
+            //        o.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuer = true,
+            //            ValidateAudience = true,
+            //            ValidateLifetime = true,
+            //            ValidateIssuerSigningKey = true,
+            //            ValidIssuer = "gh-AspNetCoreApi.com",
+            //            ValidAudience = "gh-AspNetCoreApi.com",
+            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey128Bits))
+            //        };
+            //    });
 
             var app = builder.Build();
 
