@@ -30,7 +30,7 @@ namespace AspNetCoreApi
                 .AddJwtBearer(o =>
                 {
                     o.Authority = $"https://login.microsoftonline.com/{tenantId}/v2.0";
-                    o.Audience = "oidc:clientid";
+                    o.Audience = clientId;
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
