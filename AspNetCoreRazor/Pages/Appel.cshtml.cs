@@ -1,18 +1,22 @@
+using AspNetCoreRazor.Security.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Net.Http.Headers;
 using System.Net.Http;
+using System.Text.Json;
 
 namespace AspNetCoreRazor.Pages
 {
     public class AppelModel : PageModel
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly JwtTokenTest jwtToken;
 
-        public AppelModel( IHttpClientFactory httpClientFactory)
+        public AppelModel( IHttpClientFactory httpClientFactory, JwtTokenTest jwtToken)
         {
             this.httpClientFactory = httpClientFactory;
-            
+            this.jwtToken = jwtToken;
+           
         }
 
         public void OnGet()
@@ -21,10 +25,11 @@ namespace AspNetCoreRazor.Pages
 
         public IActionResult OnPost(string token)
         {
-            // Obtenir le token JWT du serveur AspNetCoreApi
-
+            // Tenter d'utiliser le api weather qui est progété par un JwtToken
             var httpClient = httpClientFactory.CreateClient();
-            var reponse = httpClient.Send(CreerRequeteMessage(token));
+
+            var requete = CreerRequeteMessage(jwtToken.JsonToken.token);
+            var reponse = httpClient.Send(requete);
 
             return new JsonResult(new { statut = reponse.StatusCode, content = reponse.Content.ReadAsStringAsync().Result });
         }
@@ -32,7 +37,7 @@ namespace AspNetCoreRazor.Pages
         private HttpRequestMessage CreerRequeteMessage(string token)
         {
             HttpRequestMessage request = new HttpRequestMessage(
-                HttpMethod.Post,
+                HttpMethod.Get,
                 "https://localhost:7180/WeatherForecast")
             {
                 Headers =

@@ -9,16 +9,20 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using AspNetCoreRazor.Security.Authentication;
 
 namespace AspNetCoreRazor.Pages
 {
     public class LoginModel : PageModel
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly JwtTokenTest jwtToken;
 
-        public LoginModel(IHttpClientFactory httpClientFactory)
+        public LoginModel(IHttpClientFactory httpClientFactory, JwtTokenTest jwtToken)
         {
             this.httpClientFactory = httpClientFactory;
+            this.jwtToken = jwtToken;
         }
 
         public void OnGet()
@@ -31,8 +35,10 @@ namespace AspNetCoreRazor.Pages
 
             var httpClient = httpClientFactory.CreateClient();
             var reponse = httpClient.Send(CreerRequeteMessage(username, password));
+            var token = reponse.Content.ReadFromJsonAsync<JwtTokenTest.JwtToken>().Result;
+            jwtToken.JsonToken = token;
 
-            return new JsonResult(new { statut = reponse.StatusCode, content = reponse.Content.ReadAsStringAsync().Result });
+            return new JsonResult(new { statut = reponse.StatusCode, content = token });
         }
 
         private HttpRequestMessage CreerRequeteMessage(string username, string password)

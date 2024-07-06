@@ -15,12 +15,11 @@ namespace AspNetCoreRazor
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-
-
-            
+           
+            // Pour les test de Jwt
             builder.Services.AddHttpClient();
-
             builder.Services.AddLogging();
+            builder.Services.AddSingleton<JwtTokenTest>(new JwtTokenTest());
 
             var app = builder.Build();
 
