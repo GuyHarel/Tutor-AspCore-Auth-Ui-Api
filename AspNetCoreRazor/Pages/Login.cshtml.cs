@@ -8,42 +8,68 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Net.Http.Headers;
 
 namespace AspNetCoreRazor.Pages
 {
     public class LoginModel : PageModel
     {
+        private readonly IHttpClientFactory httpClientFactory;
+
+        public LoginModel(IHttpClientFactory httpClientFactory)
+        {
+            this.httpClientFactory = httpClientFactory;
+        }
+
         public void OnGet()
         {
         }
 
         public IActionResult OnPost(string username, string password)
         {
-            // Claims
-            var claims = new[]
+            // Obtenir le token JWT du serveur AspNetCoreApi
+
+            var httpClient = httpClientFactory.CreateClient();
+            var reponse = httpClient.Send(CreerRequeteMessage(username, password));
+
+            //var data = new FormUrlEncodedContent(new Dictionary<string, string>
+            //{
+            //    { "username", username },
+            //    { "password", password }
+            //});
+
+            //var reponse = httpClient.Send(new HttpRequestMessage
+            //{
+            //    Method = HttpMethod.Post,
+            //    RequestUri = new Uri("https://localhost:7180/api/jwt"),
+            //    Headers =
+            //    {
+            //        { HeaderNames.Accept, "application/json" },
+            //        { HeaderNames.UserAgent, "gh" }
+            //    },
+            //    Content = data
+                
+            //});
+
+            return new JsonResult(new { statut = reponse.StatusCode, content = reponse.Content.ReadAsStringAsync().Result });
+        }
+
+        private HttpRequestMessage CreerRequeteMessage(string username, string password)
+        {
+            var data = new FormUrlEncodedContent(new Dictionary<string, string>
             {
-            new Claim(JwtRegisteredClaimNames.Sub, username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+                { "username", username },
+                { "password", password }
+            });
 
-            // Secret Key
-            var secretKey128Bits = "6b9d5e8f3a4b2c1d0e6f7a8b9c0d1e2f3b4c5d6e7f8a9b0c1d2e3f4g5h6i7j8k";
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey128Bits));
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Post,
+                "https://localhost:7180/api/jwt/obtenir-token")
+            {
+                Content = data
+            };
 
-            // Credentials
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            // Token
-            var token = new JwtSecurityToken(
-                issuer: "yourdomain.com",
-                audience: "yourdomain.com",
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds);
-
-            return new JsonResult(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
-
-
+            return request;
         }
     }
 }

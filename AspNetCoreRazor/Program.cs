@@ -31,6 +31,8 @@ namespace AspNetCoreRazor
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("aaa1111ddd888fff"))
                         };
                     });
+            
+            builder.Services.AddHttpClient();
 
             var app = builder.Build();
 
