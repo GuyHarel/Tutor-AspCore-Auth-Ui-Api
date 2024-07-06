@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace AspNetCoreApi
@@ -40,8 +42,32 @@ namespace AspNetCoreApi
                             ValidateIssuerSigningKey = true,
                             ValidIssuer = "AspNetCoreApi.csproj",
                             ValidAudience = "AspNetCoreRazor.csproj",
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey128Bits))
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey128Bits)),
+                            NameClaimType = ClaimTypes.Name,
+                            RoleClaimType = ClaimTypes.Role,
+                            // Custom claim validation for "sub"
+                            ValidateTokenReplay = true,
+                            ValidateActor = true,
+                            RequireExpirationTime = true,
+                            RequireSignedTokens = true
                         };
+
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnTokenValidated = context =>
+                            {
+                                var userClaims = context.Principal.Claims;
+                                var subjectClaim = userClaims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Name);
+
+                                if (subjectClaim == null || subjectClaim.Value != "bibi2")
+                                {
+                                    context.Fail("Unauthorized");
+                                }
+
+                                return Task.CompletedTask;
+                            }
+                        };
+
                     });
 
             builder.Services.AddLogging();

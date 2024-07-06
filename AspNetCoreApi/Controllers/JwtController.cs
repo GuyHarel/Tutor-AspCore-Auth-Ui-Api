@@ -42,6 +42,8 @@ namespace AspNetCoreApi.Controllers
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds);
 
+            var test = JsonSerializer.Serialize(token);
+
             return new JsonResult(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
         }
 
