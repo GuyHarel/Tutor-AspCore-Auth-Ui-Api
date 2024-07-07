@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 namespace AspNetCoreRazor
@@ -14,16 +15,17 @@ namespace AspNetCoreRazor
         {
             var builder = WebApplication.CreateBuilder(args);
 
-          
+            // Add services to the container.
+            builder.Services.AddRazorPages();
+
             // Pour les test de Jwt
             builder.Services.AddHttpClient();
             builder.Services.AddLogging();
             builder.Services.AddSingleton<JwtTokenTest>(new JwtTokenTest());
 
-
             // Ajouter OpenID (qui contient Oauth 2.0)
-            var clientId = "";
-            var clientSecret = "";
+            var clientId = "e8b7d6f4-85c6-4a33-bb7d-8b715089b7a3";
+            var clientSecret = "pV~5D8s7Z3W2j5!gH7kL3^q#1P!TzR4A";
 
             builder.Services.AddAuthentication(o =>
                 {
@@ -33,15 +35,16 @@ namespace AspNetCoreRazor
             )
             .AddCookie(options =>
                 {
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    //options.Cookie.HttpOnly = true;
+                    //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+         
                 }
             )
             .AddOpenIdConnect(options =>
             {
-                options.Authority = "https://example.com"; // L'URL de votre fournisseur d'OpenID Connect
-                options.ClientId = ""; //  Configuration["Authentication:OIDC:ClientId"];
-                options.ClientSecret = ""; // Configuration["Authentication:OIDC:ClientSecret"];
+                options.Authority = "https://localhost:7180"; // L'URL de votre fournisseur d'OpenID Connect
+                options.ClientId = clientId; //  Configuration["Authentication:OIDC:ClientId"];
+                options.ClientSecret = clientSecret; // Configuration["Authentication:OIDC:ClientSecret"];
                 options.ResponseType = "code"; // Utilisation du flux de code d'autorisation
 
                 options.SaveTokens = true; // Enregistrer les jetons pour une utilisation ultérieure
@@ -52,7 +55,7 @@ namespace AspNetCoreRazor
                 options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
                 options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
                 options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-
+            
                 options.Events = new OpenIdConnectEvents
                 {
                     OnTokenValidated = context =>
@@ -80,6 +83,7 @@ namespace AspNetCoreRazor
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthorization();
 
             app.MapRazorPages();
 

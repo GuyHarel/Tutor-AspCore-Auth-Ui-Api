@@ -1,8 +1,10 @@
 ﻿@page "/Authenticated"
+@using Microsoft.AspNetCore.Authentication.OpenIdConnect
 @model AuthenticatedModel
 
 @* @attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles ="Bibi")] *@
 
+@* @attribute [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = OpenIdConnectDefaults.AuthenticationScheme)] *@
 @attribute [Microsoft.AspNetCore.Authorization.Authorize()]
 
 <h1>User: @User?.Identity?.Name , Authenticated: @User?.Identity?.IsAuthenticated</h1>
