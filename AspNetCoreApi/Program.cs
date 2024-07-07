@@ -71,47 +71,7 @@ namespace AspNetCoreApi
                     });
 
             builder.Services.AddLogging();
-            //builder.Services.AddHttpLogging(logging =>
-            //{
-            //    logging.LoggingFields = HttpLoggingFields.All;
-            //    logging.RequestHeaders.Add("Referer");
-            //    logging.RequestHeaders.Add("Origin");
-            //    logging.RequestHeaders.Add("X-Forwarded-For");
-            //    logging.RequestHeaders.Add("X-Forwarded-Host");
-            //    logging.RequestHeaders.Add("X-Forwarded-Proto");
-            //    logging.RequestHeaders.Add("Upgrade-Insecure-Requests");
-            //    logging.RequestHeaders.Add("Sec-Fetch-Site");
-            //    logging.RequestHeaders.Add("Sec-Fetch-Mode");
-            //    logging.RequestHeaders.Add("Sec-Fetch-Dest");
-            //    logging.RequestHeaders.Add("Access-Control-Request-Method");
-            //    logging.RequestHeaders.Add("Access-Control-Request-Headers");
-            //    logging.ResponseHeaders.Add("Access-Control-Allow-Origin");
-            //    logging.ResponseHeaders.Add("Access-Control-Allow-Methods");
-            //    logging.ResponseHeaders.Add("Access-Control-Request-Headers");
-            //    logging.ResponseHeaders.Add("Access-Control-Allow-Credentials");
-            //    logging.ResponseHeaders.Add("Access-Control-Max-Age");
-            //    logging.MediaTypeOptions.AddText("application/javascript");
-            //    logging.RequestBodyLogLimit = 4096;
-            //    logging.ResponseBodyLogLimit = 4096;
-            //});
-
-            //builder.Services.AddAuthentication()
-            //    .AddJwtBearer(o =>
-            //    {
-            //        o.Authority = $"https://login.microsoftonline.com/{tenantId}/v2.0";
-            //        o.Audience = clientId;
-            //        o.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //            ValidateIssuer = true,
-            //            ValidateAudience = true,
-            //            ValidateLifetime = true,
-            //            ValidateIssuerSigningKey = true,
-            //            ValidIssuer = "gh-AspNetCoreApi.com",
-            //            ValidAudience = "gh-AspNetCoreApi.com",
-            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey128Bits))
-            //        };
-            //    });
-
+         
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
