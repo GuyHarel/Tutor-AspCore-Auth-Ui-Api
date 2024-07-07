@@ -27,6 +27,7 @@ namespace AspNetCoreRazor.Pages
 
         public void OnGet()
         {
+
         }
 
         public IActionResult OnPost(string username, string password)

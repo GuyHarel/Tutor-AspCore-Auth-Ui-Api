@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreRazor", "AspNetCoreRazor\AspNetCoreRazor.csproj", "{CE1554ED-0042-4A93-BE5F-124290CD3CEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreApi", "AspNetCoreApi\AspNetCoreApi.csproj", "{4D688B58-EBBF-4A59-AC59-DEFFD92388F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApi", "AspNetCoreApi\AspNetCoreApi.csproj", "{4D688B58-EBBF-4A59-AC59-DEFFD92388F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
