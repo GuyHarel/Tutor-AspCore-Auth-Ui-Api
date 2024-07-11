@@ -32,32 +32,32 @@ namespace AspNetCoreRazor.Pages
 
         public IActionResult OnPost(string username, string password)
         {
-            // Obtenir le token JWT du serveur AspNetCoreApi
+            //// Obtenir le token JWT du serveur AspNetCoreApi
 
-            var httpClient = httpClientFactory.CreateClient();
-            var reponse = httpClient.Send(CreerRequeteMessage(username, password));
-            var token = reponse.Content.ReadFromJsonAsync<JwtTokenTest.JwtToken>().Result;
-            jwtToken.JsonToken = token;
+            //var httpClient = httpClientFactory.CreateClient();
+            //var reponse = httpClient.Send(CreerRequeteMessage(username, password));
+            //var token = reponse.Content.ReadFromJsonAsync<JwtTokenTest.JwtToken>().Result;
+            //jwtToken.JsonToken = token;
 
-            return new JsonResult(new { statut = reponse.StatusCode, content = token });
+            return new JsonResult(new { statut = "vide" });
         }
 
-        private HttpRequestMessage CreerRequeteMessage(string username, string password)
-        {
-            var data = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                { "username", username },
-                { "password", password }
-            });
+        //private HttpRequestMessage CreerRequeteMessage(string username, string password)
+        //{
+        //    var data = new FormUrlEncodedContent(new Dictionary<string, string>
+        //    {
+        //        { "username", username },
+        //        { "password", password }
+        //    });
 
-            HttpRequestMessage request = new HttpRequestMessage(
-                HttpMethod.Post,
-                "https://localhost:7180/api/jwt/obtenir-token")
-            {
-                Content = data
-            };
+        //    HttpRequestMessage request = new HttpRequestMessage(
+        //        HttpMethod.Post,
+        //        "https://localhost:7180/api/jwt/obtenir-token")
+        //    {
+        //        Content = data
+        //    };
 
-            return request;
-        }
+        //    return request;
+        //}
     }
 }
