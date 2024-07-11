@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -34,6 +35,7 @@ namespace AspNetCoreApi
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                IdentityModelEventSource.ShowPII = true;
             }
 
             app.UseHttpsRedirection();

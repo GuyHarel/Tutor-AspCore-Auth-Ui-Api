@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 namespace AspNetCoreApi.Controllers
 {
@@ -9,10 +11,18 @@ namespace AspNetCoreApi.Controllers
     public class OpenIdController : ControllerBase
     {
         private readonly ILogger<OpenIdController> logger;
+        private static RSA _rsa;
+        private static RsaSecurityKey _rsaKey;
 
         public OpenIdController(ILogger<OpenIdController> logger)
         {
             this.logger = logger;
+
+            _rsa = RSA.Create(2048);
+            _rsaKey = new RsaSecurityKey(_rsa)
+            {
+                KeyId = Guid.NewGuid().ToString()
+            };
         }
 
         public IActionResult OnGet()
@@ -45,6 +55,8 @@ namespace AspNetCoreApi.Controllers
         [HttpGet("jwks.json")]
         public IActionResult GetJwks()
         {
+            var parameters = _rsa.ExportParameters(false);
+
             var jwks = new Jwks
             {
                 Keys = new List<JwksKey>
@@ -53,10 +65,10 @@ namespace AspNetCoreApi.Controllers
                 {
                     Kty = "RSA",
                     Use = "sig",
-                    Kid = Guid.NewGuid().ToString(), // "your-key-id",
+                    Kid = _rsaKey.KeyId, //Guid.NewGuid().ToString(), // "your-key-id",
                     Alg = "RS256",
-                    N = "your-modulus-base64-url-encoded",
-                    E = "your-exponent-base64-url-encoded"
+                    N = Base64UrlEncode(parameters.Modulus), // "your-modulus-base64-url-encoded",
+                    E = Base64UrlEncode(parameters.Exponent) //"your-exponent-base64-url-encoded"
                 }
             }
             };
@@ -64,6 +76,14 @@ namespace AspNetCoreApi.Controllers
             return new JsonResult(jwks);
         }
 
+        private static string Base64UrlEncode(byte[] input)
+        {
+            var output = Convert.ToBase64String(input);
+            output = output.Split('=')[0]; // Remove any trailing '='s
+            output = output.Replace('+', '-'); // 62nd char of encoding
+            output = output.Replace('/', '_'); // 63rd char of encoding
+            return output;
+        }
 
     }
 }

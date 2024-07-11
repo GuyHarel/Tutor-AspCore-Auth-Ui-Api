@@ -92,10 +92,14 @@ namespace AspNetCoreRazor
                 app.UseHsts();
 
                 // Show PII in development environment
+
+            }
+            if (app.Environment.IsDevelopment())
+            {
                 IdentityModelEventSource.ShowPII = true;
             }
 
-            app.UseAuthentication();
+                app.UseAuthentication();
 
 
             app.UseHttpsRedirection();
